@@ -1,7 +1,71 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090b12"><meta name="description" content="PINGO – dein Social Space."><title>PINGO</title><link rel="stylesheet" href="./styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
-<body><main class="shell"><section class="brand" id="brand"><div class="logo">P<span>•</span></div><p class="eyebrow">YOUR PEOPLE. YOUR SPACE.</p><h1>Stay close.<br><span>Stay PINGO.</span></h1><p class="intro">Ein neuer Ort für deine Chats, Gruppen und Momente.</p><div class="visual"><i></i><i></i><i></i><i></i><i></i></div></section>
-<section class="auth-card" id="authCard"><div class="tabs"><button class="tab active" id="loginTab" type="button">Anmelden</button><button class="tab" id="registerTab" type="button">Konto erstellen</button></div><form id="authForm"><label for="username">Name</label><input id="username" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="DeinName" required><label for="password">Passwort</label><input id="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" placeholder="Mindestens 8 Zeichen" required><button class="submit" id="submitButton" type="submit">Anmelden <span>→</span></button><p class="message" id="message" role="status"></p></form><p class="fineprint">Nur Name und Passwort. Keine E-Mail-Adresse nötig.</p></section>
-<section class="app-card hidden" id="appCard"><header class="app-header"><div class="app-brand"><div class="mini-logo">P<span>•</span></div><div><strong>PINGO</strong><small id="signedInName">Online</small></div></div><button class="icon-button" id="logoutButton" type="button" aria-label="Abmelden">↗</button></header>
-<div class="messenger"><aside class="chat-sidebar"><div class="sidebar-title"><h2>Chats</h2><span class="online-dot"></span></div><input class="search" id="peopleSearch" type="search" placeholder="Personen suchen …" autocomplete="off"><div id="searchResults" class="search-results hidden"></div><div id="chatList" class="chat-list"><p class="empty-note">Deine Chats erscheinen hier.</p></div></aside>
-<section class="chat-panel"><div class="chat-empty" id="chatEmpty"><div class="empty-orbit">P<span>•</span></div><h2>Dein Platz für Gespräche.</h2><p>Suche nach einem Namen und starte deinen ersten privaten Chat.</p></div><div class="active-chat hidden" id="activeChat"><div class="chat-top"><div class="avatar" id="chatAvatar">P</div><div><strong id="chatTitle">Chat</strong><small>Privater Chat</small></div></div><div class="messages" id="messages" aria-live="polite"></div><form class="composer" id="messageForm"><input id="messageInput" maxlength="4000" placeholder="Nachricht schreiben …" autocomplete="off" required><button id="sendButton" type="submit" aria-label="Nachricht senden">↑</button></form></div></section></div><p class="app-status" id="appStatus" role="status"></p></section></main><footer><span>© PINGO</span><span>MADE TO CONNECT</span></footer><script src="./app.js"></script></body></html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="description" content="PINGO – private Chats mit deinen Leuten.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PINGO">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <title>PINGO — Stay close.</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <main class="shell">
+    <section class="brand" id="brand">
+      <a class="logo" href="#" aria-label="PINGO Startseite">P<span>•</span></a>
+      <p class="eyebrow">YOUR PEOPLE. YOUR SPACE.</p>
+      <h1>Stay close.<br><span>Stay PINGO.</span></h1>
+      <p class="intro">Deine Gespräche. Deine Leute. Ein Ort, der sich überall zuhause anfühlt.</p>
+      <div class="visual" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="brand-note"><span class="pulse"></span> Ein Platz für deine Leute</div>
+    </section>
+
+    <section class="auth-card" id="authCard">
+      <div class="auth-heading"><div class="mini-logo">P<span>•</span></div><div><p class="eyebrow">WILLKOMMEN BEI</p><h2>PINGO</h2></div></div>
+      <div class="tabs" role="tablist" aria-label="Konto"><button class="tab active" id="loginTab" type="button" role="tab" aria-selected="true">Anmelden</button><button class="tab" id="registerTab" type="button" role="tab" aria-selected="false">Konto erstellen</button></div>
+      <form id="authForm">
+        <label for="username">Dein Benutzername</label><input id="username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="z. B. PingoFan" required>
+        <label for="password">Passwort</label><input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" placeholder="Mindestens 8 Zeichen" required>
+        <button class="submit" id="submitButton" type="submit"><span>Anmelden</span><b>→</b></button>
+        <p class="message" id="message" role="status" aria-live="polite"></p>
+      </form>
+      <div class="auth-foot"><span class="lock">◆</span> Nur Benutzername und Passwort. Keine E-Mail nötig.</div>
+    </section>
+
+    <section class="app-card hidden" id="appCard">
+      <header class="app-header">
+        <div class="app-brand"><div class="mini-logo">P<span>•</span></div><div><strong>PINGO</strong><small>YOUR PEOPLE. YOUR SPACE.</small></div></div>
+        <div class="header-actions"><span class="secure-label"><i></i> Privat</span><button class="icon-button" id="logoutButton" type="button" aria-label="Abmelden" title="Abmelden">↗</button></div>
+      </header>
+      <div class="messenger" id="messenger">
+        <aside class="chat-sidebar" id="chatSidebar">
+          <div class="sidebar-heading"><div><p class="eyebrow">DEIN BEREICH</p><h2>Nachrichten</h2></div><button class="new-chat-button" id="newChatButton" type="button" aria-label="Neuen Chat starten" title="Neuen Chat starten">＋</button></div>
+          <div class="search-box"><span>⌕</span><input id="peopleSearch" type="search" placeholder="Personen suchen …" autocomplete="off" autocapitalize="none" spellcheck="false"><button id="clearSearch" class="clear-search hidden" type="button" aria-label="Suche löschen">×</button></div>
+          <div class="search-results hidden" id="searchResults"></div>
+          <div class="list-label"><span>LETZTE CHATS</span><span id="chatCount">0</span></div>
+          <div id="chatList" class="chat-list"><div class="list-loading"><span class="spinner"></span> Deine Chats werden geladen …</div></div>
+          <div class="sidebar-profile"><div class="avatar self-avatar" id="selfAvatar">P</div><div class="profile-copy"><strong id="profileName">PINGO</strong><small>Dein Konto</small></div><button class="profile-logout" id="profileLogout" type="button" aria-label="Abmelden">⤴</button></div>
+        </aside>
+        <section class="chat-panel" id="chatPanel">
+          <div class="chat-empty" id="chatEmpty"><div class="empty-art"><div class="empty-orbit">P<span>•</span></div><span class="spark spark-a">✳</span><span class="spark spark-b">✦</span></div><p class="eyebrow">SCHÖN, DASS DU DA BIST</p><h2>Dein Platz für<br><span>gute Gespräche.</span></h2><p>Wähle einen Chat aus oder suche nach einem Namen, um loszulegen.</p><button class="primary-small" id="emptyNewChat" type="button">Neuen Chat starten <span>→</span></button></div>
+          <div class="active-chat hidden" id="activeChat">
+            <div class="chat-top"><button class="back-button" id="backToChats" type="button" aria-label="Zurück zu Chats">←</button><div class="avatar chat-avatar" id="chatAvatar">P</div><div class="chat-person"><strong id="chatTitle">Chat</strong><small><i class="tiny-dot"></i> Privater Chat</small></div><span class="chat-top-spacer"></span><button class="icon-button chat-info" type="button" id="chatInfo" aria-label="Chat-Information" title="Privater Chat">ⓘ</button></div>
+            <div class="message-area" id="messageArea"><div class="date-divider"><span>DEINE UNTERHALTUNG</span></div><div class="messages" id="messages" aria-live="polite" aria-relevant="additions"></div><div id="messageHint" class="message-hint">Deine Nachrichten sind nur für Mitglieder dieses Chats sichtbar.</div></div>
+            <form class="composer" id="messageForm"><div class="composer-inner"><textarea id="messageInput" rows="1" maxlength="4000" placeholder="Schreib eine Nachricht …" aria-label="Nachricht schreiben" required></textarea><button id="sendButton" type="submit" aria-label="Nachricht senden"><span>↑</span></button></div><div class="composer-bottom"><span>Enter zum Senden · Shift + Enter für neue Zeile</span><span id="charCount">0 / 4000</span></div></form>
+          </div>
+        </section>
+      </div>
+      <p class="app-status" id="appStatus" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <footer><span>© PINGO</span><span>MADE TO CONNECT</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
