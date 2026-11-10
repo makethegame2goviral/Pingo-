@@ -58,7 +58,7 @@
       message.textContent = error.message || "Verbindung fehlgeschlagen. Bitte erneut versuchen.";
     } finally {
       submitButton.disabled = false;
-      setMode(mode);
+      submitButton.innerHTML = mode === "login" ? 'Anmelden <span>→</span>' : 'Konto erstellen <span>→</span>';
     }
   });
 
