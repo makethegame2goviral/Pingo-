@@ -3,6 +3,7 @@
   const URL="https://puddgzxqekteblmlpiqv.supabase.co";
   const KEY="sb_publishable_PVR0CA2g2AXgzoUDnAE_pg_GkWb5LRb";
   const AUTH=URL+"/functions/v1/pingo-auth";
+  if(!window.supabase?.createClient){const hint=document.querySelector("#message");if(hint)hint.textContent="PINGO konnte nicht geladen werden. Bitte Internetverbindung prüfen und neu laden.";return;}
   const db=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   const $=s=>document.querySelector(s);
   const state={mode:"login",user:null,chatId:null,chatName:"",channel:null,searchTimer:null,searchSeq:0,sending:false,installPrompt:null};
