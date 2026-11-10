@@ -1,35 +1,38 @@
 # PINGO
 
-Dark, social-first messenger web app.
+A responsive private-chat web app built with Supabase.
 
-## Current status
-- Username + password registration and login (no email or phone field).
-- Supabase Auth handles password storage and sessions.
-- Private one-to-one chats with username search.
-- Messages are stored in Supabase and update live through Realtime.
-- Conversation and message access is restricted with Row Level Security.
-- Groups, voice/video calls, moments/stories, media uploads and password recovery are not implemented yet.
+## Features
+- Username + password registration and login (no email field).
+- Private one-to-one conversations with username search.
+- Persistent messages and live updates through Supabase Realtime.
+- Responsive desktop, tablet, iPad portrait/landscape and phone layouts.
+- On phones, chat view switches to a full-screen conversation with a back button.
+- PWA manifest, app icon and offline-cached app shell.
+- Accessible labels, keyboard message sending, safe-area and reduced-motion support.
 
 ## Backend
 - Supabase project: Size
 - Edge Function: `pingo-auth`
-- Database tables: `pingo_usernames`, `pingo_conversations`, `pingo_conversation_members`, `pingo_messages`.
+- Tables: `pingo_usernames`, `pingo_conversations`, `pingo_conversation_members`, `pingo_messages`.
 - Realtime publication: `pingo_messages`.
+- Conversation membership and message access are restricted with RLS.
 
 The frontend contains only the publishable key. The service-role key stays inside Supabase Edge Function secrets and is never committed here.
 
 ## Account rules
 - Username: 3–20 characters, letters, numbers and underscore.
 - Password: 8–72 characters.
-- Names are unique without case sensitivity.
-- There is no email-based password reset. Account recovery needs a separate recovery-code feature.
+- Usernames are unique without case sensitivity.
+- No email-based password reset is configured yet.
 
-## Run
-Open `index.html` through a static web host such as GitHub Pages. HTTPS is required for normal browser deployment.
+## Install
+Deploy the repository root over HTTPS (for example with GitHub Pages). On iPhone/iPad, open the deployed site in Safari, tap Share, then “Add to Home Screen”. On supported browsers, use the browser's install option.
+
+The offline cache keeps the app shell available. Authentication, searching and sending messages still require an internet connection.
 
 ## Security notes
 - Never add a Supabase service-role or secret key to frontend files.
-- The auth function is public by design and validates inputs server-side.
-- Chat tables use RLS. Users can only read conversations they belong to and send messages as themselves.
-- Direct-chat creation and chat-list functions are callable only by signed-in users and derive identity from `auth.uid()`.
-- Add rate limiting / abuse protection to the public auth function before opening registration widely.
+- The public auth Edge Function validates input; rate limiting / abuse protection should be added before opening registration widely.
+- Chat tables use RLS; users can only read conversations they belong to and send messages as themselves.
+- The membership helper is in the non-exposed `private` schema. The public chat RPC functions derive identity from `auth.uid()`.
