@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b12">
+  <meta name="description" content="PINGO – dein Social Space.">
+  <title>PINGO</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="brand">
+      <div class="logo">P<span>•</span></div>
+      <p class="eyebrow">YOUR PEOPLE. YOUR SPACE.</p>
+      <h1>Stay close.<br><span>Stay PINGO.</span></h1>
+      <p class="intro">Ein neuer Ort für deine Chats, Gruppen und Momente.</p>
+      <div class="visual" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="auth-card" id="authCard">
+      <div class="tabs">
+        <button class="tab active" id="loginTab" type="button">Anmelden</button>
+        <button class="tab" id="registerTab" type="button">Konto erstellen</button>
+      </div>
+      <form id="authForm">
+        <label for="username">Name</label>
+        <input id="username" name="username" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="DeinName" required>
+        <label for="password">Passwort</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" placeholder="Mindestens 8 Zeichen" required>
+        <button class="submit" id="submitButton" type="submit">Anmelden <span>→</span></button>
+        <p class="message" id="message" role="status"></p>
+      </form>
+      <p class="fineprint">Nur Name und Passwort. Keine E-Mail-Adresse nötig.</p>
+    </section>
+
+    <section class="welcome-card hidden" id="welcomeCard">
+      <div class="welcome-top"><span class="online-dot"></span> ANGEMELDET</div>
+      <h2>Hey, <span id="welcomeName">du</span>.</h2>
+      <p>Willkommen bei PINGO. Dein Social Space wird gerade vorbereitet.</p>
+      <div class="feature-row"><span>01</span> Private Chats <small>COMING NEXT</small></div>
+      <div class="feature-row"><span>02</span> Gruppen <small>COMING NEXT</small></div>
+      <div class="feature-row"><span>03</span> Momente <small>COMING NEXT</small></div>
+      <button class="logout" id="logoutButton" type="button">Abmelden</button>
+    </section>
+  </main>
+  <footer><span>© PINGO</span><span>MADE TO CONNECT</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
