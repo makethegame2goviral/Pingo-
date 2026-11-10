@@ -1,18 +1,20 @@
 # PINGO
 
-Dark, social-first web app starter.
+Dark, social-first messenger web app.
 
 ## Current status
 - Username + password registration and login (no email or phone field).
 - Supabase Auth handles password storage and sessions.
-- A server-side Supabase Edge Function maps usernames to internal, non-deliverable auth identifiers.
-- Signed-in welcome screen is ready. Chats, groups, calls and moments are not implemented yet.
+- Private one-to-one chats with username search.
+- Messages are stored in Supabase and update live through Realtime.
+- Conversation and message access is restricted with Row Level Security.
+- Groups, voice/video calls, moments/stories, media uploads and password recovery are not implemented yet.
 
 ## Backend
 - Supabase project: Size
-- Edge Function: pingo-auth
-- Function URL: https://puddgzxqekteblmlpiqv.supabase.co/functions/v1/pingo-auth
-- Database table: public.pingo_usernames (RLS enabled; browser roles have no table access).
+- Edge Function: `pingo-auth`
+- Database tables: `pingo_usernames`, `pingo_conversations`, `pingo_conversation_members`, `pingo_messages`.
+- Realtime publication: `pingo_messages`.
 
 The frontend contains only the publishable key. The service-role key stays inside Supabase Edge Function secrets and is never committed here.
 
@@ -23,9 +25,11 @@ The frontend contains only the publishable key. The service-role key stays insid
 - There is no email-based password reset. Account recovery needs a separate recovery-code feature.
 
 ## Run
-Open index.html through a static web host such as GitHub Pages. HTTPS is required for normal browser deployment.
+Open `index.html` through a static web host such as GitHub Pages. HTTPS is required for normal browser deployment.
 
-## Security
+## Security notes
 - Never add a Supabase service-role or secret key to frontend files.
-- The auth function is public by design and validates all inputs server-side.
-- Add rate limiting / abuse protection before opening registration widely.
+- The auth function is public by design and validates inputs server-side.
+- Chat tables use RLS. Users can only read conversations they belong to and send messages as themselves.
+- Direct-chat creation and chat-list functions are callable only by signed-in users and derive identity from `auth.uid()`.
+- Add rate limiting / abuse protection to the public auth function before opening registration widely.
