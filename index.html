@@ -1,51 +1,7 @@
 <!doctype html>
-<html lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090b12">
-  <meta name="description" content="PINGO – dein Social Space.">
-  <title>PINGO</title>
-  <link rel="stylesheet" href="./styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
-  <main class="shell">
-    <section class="brand">
-      <div class="logo">P<span>•</span></div>
-      <p class="eyebrow">YOUR PEOPLE. YOUR SPACE.</p>
-      <h1>Stay close.<br><span>Stay PINGO.</span></h1>
-      <p class="intro">Ein neuer Ort für deine Chats, Gruppen und Momente.</p>
-      <div class="visual" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-    </section>
-
-    <section class="auth-card" id="authCard">
-      <div class="tabs">
-        <button class="tab active" id="loginTab" type="button">Anmelden</button>
-        <button class="tab" id="registerTab" type="button">Konto erstellen</button>
-      </div>
-      <form id="authForm">
-        <label for="username">Name</label>
-        <input id="username" name="username" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="DeinName" required>
-        <label for="password">Passwort</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" placeholder="Mindestens 8 Zeichen" required>
-        <button class="submit" id="submitButton" type="submit">Anmelden <span>→</span></button>
-        <p class="message" id="message" role="status"></p>
-      </form>
-      <p class="fineprint">Nur Name und Passwort. Keine E-Mail-Adresse nötig.</p>
-    </section>
-
-    <section class="welcome-card hidden" id="welcomeCard">
-      <div class="welcome-top"><span class="online-dot"></span> ANGEMELDET</div>
-      <h2>Hey, <span id="welcomeName">du</span>.</h2>
-      <p>Willkommen bei PINGO. Dein Social Space wird gerade vorbereitet.</p>
-      <div class="feature-row"><span>01</span> Private Chats <small>COMING NEXT</small></div>
-      <div class="feature-row"><span>02</span> Gruppen <small>COMING NEXT</small></div>
-      <div class="feature-row"><span>03</span> Momente <small>COMING NEXT</small></div>
-      <button class="logout" id="logoutButton" type="button">Abmelden</button>
-    </section>
-  </main>
-  <footer><span>© PINGO</span><span>MADE TO CONNECT</span></footer>
-  <script src="./app.js"></script>
-</body>
-</html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090b12"><meta name="description" content="PINGO – dein Social Space."><title>PINGO</title><link rel="stylesheet" href="./styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><main class="shell"><section class="brand" id="brand"><div class="logo">P<span>•</span></div><p class="eyebrow">YOUR PEOPLE. YOUR SPACE.</p><h1>Stay close.<br><span>Stay PINGO.</span></h1><p class="intro">Ein neuer Ort für deine Chats, Gruppen und Momente.</p><div class="visual"><i></i><i></i><i></i><i></i><i></i></div></section>
+<section class="auth-card" id="authCard"><div class="tabs"><button class="tab active" id="loginTab" type="button">Anmelden</button><button class="tab" id="registerTab" type="button">Konto erstellen</button></div><form id="authForm"><label for="username">Name</label><input id="username" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="DeinName" required><label for="password">Passwort</label><input id="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" placeholder="Mindestens 8 Zeichen" required><button class="submit" id="submitButton" type="submit">Anmelden <span>→</span></button><p class="message" id="message" role="status"></p></form><p class="fineprint">Nur Name und Passwort. Keine E-Mail-Adresse nötig.</p></section>
+<section class="app-card hidden" id="appCard"><header class="app-header"><div class="app-brand"><div class="mini-logo">P<span>•</span></div><div><strong>PINGO</strong><small id="signedInName">Online</small></div></div><button class="icon-button" id="logoutButton" type="button" aria-label="Abmelden">↗</button></header>
+<div class="messenger"><aside class="chat-sidebar"><div class="sidebar-title"><h2>Chats</h2><span class="online-dot"></span></div><input class="search" id="peopleSearch" type="search" placeholder="Personen suchen …" autocomplete="off"><div id="searchResults" class="search-results hidden"></div><div id="chatList" class="chat-list"><p class="empty-note">Deine Chats erscheinen hier.</p></div></aside>
+<section class="chat-panel"><div class="chat-empty" id="chatEmpty"><div class="empty-orbit">P<span>•</span></div><h2>Dein Platz für Gespräche.</h2><p>Suche nach einem Namen und starte deinen ersten privaten Chat.</p></div><div class="active-chat hidden" id="activeChat"><div class="chat-top"><div class="avatar" id="chatAvatar">P</div><div><strong id="chatTitle">Chat</strong><small>Privater Chat</small></div></div><div class="messages" id="messages" aria-live="polite"></div><form class="composer" id="messageForm"><input id="messageInput" maxlength="4000" placeholder="Nachricht schreiben …" autocomplete="off" required><button id="sendButton" type="submit" aria-label="Nachricht senden">↑</button></form></div></section></div><p class="app-status" id="appStatus" role="status"></p></section></main><footer><span>© PINGO</span><span>MADE TO CONNECT</span></footer><script src="./app.js"></script></body></html>
