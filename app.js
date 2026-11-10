@@ -1,78 +1,24 @@
 (() => {
-  const SUPABASE_URL = "https://puddgzxqekteblmlpiqv.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_PVR0CA2g2AXgzoUDnAE_pg_GkWb5LRb";
-  const AUTH_URL = `${SUPABASE_URL}/functions/v1/pingo-auth`;
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
-  const form = document.querySelector("#authForm");
-  const usernameInput = document.querySelector("#username");
-  const passwordInput = document.querySelector("#password");
-  const message = document.querySelector("#message");
-  const submitButton = document.querySelector("#submitButton");
-  const loginTab = document.querySelector("#loginTab");
-  const registerTab = document.querySelector("#registerTab");
-  const authCard = document.querySelector("#authCard");
-  const welcomeCard = document.querySelector("#welcomeCard");
-  const welcomeName = document.querySelector("#welcomeName");
-  const logoutButton = document.querySelector("#logoutButton");
-  let mode = "login";
-
-  function setMode(next) {
-    mode = next;
-    loginTab.classList.toggle("active", mode === "login");
-    registerTab.classList.toggle("active", mode === "register");
-    submitButton.innerHTML = mode === "login" ? 'Anmelden <span>→</span>' : 'Konto erstellen <span>→</span>';
-    passwordInput.autocomplete = mode === "login" ? "current-password" : "new-password";
-    passwordInput.placeholder = mode === "login" ? "Dein Passwort" : "Mindestens 8 Zeichen";
-    message.textContent = "";
-  }
-
-  function showWelcome(name) {
-    authCard.classList.add("hidden");
-    welcomeCard.classList.remove("hidden");
-    welcomeName.textContent = name;
-  }
-
-  loginTab.addEventListener("click", () => setMode("login"));
-  registerTab.addEventListener("click", () => setMode("register"));
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    message.textContent = "";
-    submitButton.disabled = true;
-    submitButton.textContent = mode === "login" ? "Anmeldung läuft …" : "Konto wird erstellt …";
-
-    try {
-      const response = await fetch(AUTH_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "apikey": SUPABASE_PUBLISHABLE_KEY },
-        body: JSON.stringify({ action: mode, username: usernameInput.value.trim(), password: passwordInput.value })
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Anmeldung fehlgeschlagen.");
-      const { error } = await supabase.auth.setSession(result.session);
-      if (error) throw error;
-      showWelcome(result.user.username);
-      passwordInput.value = "";
-    } catch (error) {
-      message.textContent = error.message || "Verbindung fehlgeschlagen. Bitte erneut versuchen.";
-    } finally {
-      submitButton.disabled = false;
-      submitButton.innerHTML = mode === "login" ? 'Anmelden <span>→</span>' : 'Konto erstellen <span>→</span>';
-    }
-  });
-
-  logoutButton.addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    welcomeCard.classList.add("hidden");
-    authCard.classList.remove("hidden");
-    setMode("login");
-  });
-
-  supabase.auth.getSession().then(({ data }) => {
-    if (data.session) {
-      const name = data.session.user.user_metadata?.username || "PINGO";
-      showWelcome(name);
-    }
-  });
+const URL="https://puddgzxqekteblmlpiqv.supabase.co",KEY="sb_publishable_PVR0CA2g2AXgzoUDnAE_pg_GkWb5LRb",AUTH=URL+"/functions/v1/pingo-auth";
+const db=window.supabase.createClient(URL,KEY),$=s=>document.querySelector(s);
+let mode="login",user=null,chatId=null,channel=null,searchDelay=null,searchSeq=0;
+const auth=$("#authCard"),app=$("#appCard"),brand=$("#brand"),msg=$("#message"),submit=$("#submitButton");
+function status(t=""){ $("#appStatus").textContent=t; }
+function avatar(n){const e=document.createElement("span");e.className="avatar";e.textContent=(n||"P").slice(0,1).toUpperCase();return e;}
+function closeChannel(){if(channel)db.removeChannel(channel);channel=null;}
+function setMode(m){mode=m;$("#loginTab").classList.toggle("active",m==="login");$("#registerTab").classList.toggle("active",m==="register");submit.innerHTML=m==="login"?'Anmelden <span>→</span>':'Konto erstellen <span>→</span>';$("#password").autocomplete=m==="login"?"current-password":"new-password";msg.textContent="";}
+async function showApp(name){auth.classList.add("hidden");brand.classList.add("hidden");app.classList.remove("hidden");$("#signedInName").textContent=name;await loadChats();}
+$("#loginTab").onclick=()=>setMode("login");$("#registerTab").onclick=()=>setMode("register");
+$("#authForm").addEventListener("submit",async e=>{e.preventDefault();msg.textContent="";submit.disabled=true;submit.textContent=mode==="login"?"Anmeldung läuft …":"Konto wird erstellt …";try{const r=await fetch(AUTH,{method:"POST",headers:{"Content-Type":"application/json",apikey:KEY},body:JSON.stringify({action:mode,username:$("#username").value.trim(),password:$("#password").value})});const j=await r.json();if(!r.ok)throw Error(j.error||"Anmeldung fehlgeschlagen.");const {error}=await db.auth.setSession(j.session);if(error)throw error;user=j.session.user;$("#password").value="";await showApp(j.user.username);}catch(x){msg.textContent=x.message||"Verbindung fehlgeschlagen.";}finally{submit.disabled=false;setMode(mode);}});
+async function loadChats(){if(!user)return;const {data,error}=await db.rpc("pingo_list_chats");if(error){status("Chats konnten nicht geladen werden: "+error.message);return;}const list=$("#chatList");list.replaceChildren();if(!data?.length){const p=document.createElement("p");p.className="empty-note";p.textContent="Noch keine Chats. Suche oben nach einem Namen.";list.append(p);return;}data.forEach(c=>{const b=document.createElement("button");b.type="button";b.className="chat-item"+(c.conversation_id===chatId?" selected":"");b.append(avatar(c.partner_username));const wrap=document.createElement("span"),name=document.createElement("strong"),preview=document.createElement("small");name.textContent=c.partner_username;preview.textContent=c.last_message||"Noch keine Nachrichten";wrap.append(name,preview);b.append(wrap);b.onclick=()=>openChat(c.conversation_id,c.partner_id,c.partner_username);list.append(b);});}
+async function searchPeople(term){const seq=++searchSeq,results=$("#searchResults");results.replaceChildren();term=term.trim();if(term.length<2){results.classList.add("hidden");return;}const {data,error}=await db.from("pingo_usernames").select("username,username_lower").ilike("username","%"+term+"%").order("username").limit(8);if(seq!==searchSeq)return;results.classList.remove("hidden");if(error){const p=document.createElement("p");p.className="empty-note";p.textContent="Suche gerade nicht möglich.";results.append(p);return;}const found=(data||[]).filter(x=>x.username_lower!==user.user_metadata?.username?.toLowerCase());if(!found.length){const p=document.createElement("p");p.className="empty-note";p.textContent="Keine passenden Namen gefunden.";results.append(p);return;}found.forEach(p=>{const b=document.createElement("button");b.type="button";b.className="person-result";b.append(avatar(p.username));const w=document.createElement("span"),n=document.createElement("strong"),s=document.createElement("small");n.textContent=p.username;s.textContent="Privaten Chat starten";w.append(n,s);b.append(w);b.onclick=()=>startChat(p.username);results.append(b);});}
+$("#peopleSearch").addEventListener("input",()=>{clearTimeout(searchDelay);searchDelay=setTimeout(()=>searchPeople($("#peopleSearch").value),200);});
+document.addEventListener("click",e=>{if(!$("#searchResults").contains(e.target)&&e.target!==$("#peopleSearch"))$("#searchResults").classList.add("hidden");});
+async function startChat(name){status();$("#searchResults").classList.add("hidden");$("#peopleSearch").value="";const {data,error}=await db.rpc("pingo_start_direct_chat",{target_username:name});if(error){status(error.message);return;}await loadChats();await openChat(data,null,name);}
+async function openChat(id,partner,name){closeChannel();chatId=id;$("#chatEmpty").classList.add("hidden");$("#activeChat").classList.remove("hidden");$("#chatTitle").textContent=name;$("#chatAvatar").textContent=(name||"P").slice(0,1).toUpperCase();await loadMessages();await loadChats();channel=db.channel("pingo-"+id).on("postgres_changes",{event:"INSERT",schema:"public",table:"pingo_messages",filter:"conversation_id=eq."+id},payload=>{append(payload.new);loadChats();}).subscribe();}
+function append(m){if(document.querySelector('[data-message-id="'+m.id+'"]'))return;const b=document.createElement("div");b.className="bubble"+(m.sender_id===user.id?" mine":"");b.dataset.messageId=m.id;const body=document.createElement("div"),time=document.createElement("small");body.textContent=m.body;time.textContent=new Date(m.created_at).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});b.append(body,time);$("#messages").append(b);$("#messages").scrollTop=$("#messages").scrollHeight;}
+async function loadMessages(){const {data,error}=await db.from("pingo_messages").select("id,sender_id,body,created_at").eq("conversation_id",chatId).order("created_at",{ascending:true}).limit(100);if(error){status("Nachrichten konnten nicht geladen werden: "+error.message);return;}$("#messages").replaceChildren();(data||[]).forEach(append);}
+$("#messageForm").addEventListener("submit",async e=>{e.preventDefault();const body=$("#messageInput").value.trim();if(!body||!chatId)return;$("#sendButton").disabled=true;const {error}=await db.from("pingo_messages").insert({conversation_id:chatId,sender_id:user.id,body});$("#sendButton").disabled=false;if(error){status("Senden fehlgeschlagen: "+error.message);return;}$("#messageInput").value="";status();await loadMessages();await loadChats();});
+$("#logoutButton").onclick=async()=>{closeChannel();await db.auth.signOut();user=null;chatId=null;app.classList.add("hidden");brand.classList.remove("hidden");auth.classList.remove("hidden");$("#chatEmpty").classList.remove("hidden");$("#activeChat").classList.add("hidden");setMode("login");};
+db.auth.getSession().then(({data})=>{if(data.session){user=data.session.user;showApp(user.user_metadata?.username||"PINGO");}});
 })();
