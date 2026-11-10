@@ -64,7 +64,7 @@
     state.channel=db.channel("pingo-chat-"+id).on("postgres_changes",{event:"INSERT",schema:"public",table:"pingo_messages",filter:"conversation_id=eq."+id},payload=>{
       if(state.chatId!==id)return;appendMessage(payload.new);loadChats();
     }).subscribe((channelStatus)=>{if(channelStatus==="CHANNEL_ERROR"||channelStatus==="TIMED_OUT")status("Live-Verbindung unterbrochen. Neue Nachrichten erscheinen nach erneutem Laden.");});
-    el.input.focus({preventScroll:true});
+    if(window.matchMedia("(min-width: 701px)").matches)el.input.focus({preventScroll:true});
   }
   function appendMessage(item){
     if(document.querySelector('[data-message-id="'+CSS.escape(item.id)+'"]'))return;
